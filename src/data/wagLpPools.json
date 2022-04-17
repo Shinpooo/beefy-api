@@ -1,0 +1,21 @@
+[
+  {
+    "name": "wag-vlx-busd",
+    "address": "0x8e2B762Bee3E2bf2C8fB0cdd04274042748D6C23",
+    "decimals": "1e18",
+    "poolId": 3,
+    "chainId": 106,
+    "lp0": {
+      "address": "0xc579D1f3CF86749E05CD06f7ADe17856c2CE3126",
+      "oracle": "tokens",
+      "oracleId": "VLX",
+      "decimals": "1e18"
+    },
+    "lp1": {
+      "address": "0xc111c29A988AE0C0087D97b33C6E6766808A3BD3",
+      "oracle": "tokens",
+      "oracleId": "BUSD",
+      "decimals": "1e18"
+    }
+  }
+]

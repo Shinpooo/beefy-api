@@ -17,6 +17,7 @@ const MULTICALLS = {
   122: '0xE99c8A590c98c7Ae9FB3B7ecbC115D2eBD533B50',
   1088: '0xfcDD5a02C611ba6Fe2802f885281500EC95805d7',
   1284: '0xd9F2Da642FAA1307e4F70a5E3aC31b9bfe920eAF',
+  106: '0xa673C00F5bE3603Bc2Be4192aC41daa45499085A',
 };
 
 const MulticallAbi = require('../abis/BeefyPriceMulticall.json');
@@ -51,6 +52,7 @@ const calcLpPrice = (pool, tokenPrices) => {
 };
 
 const fetchAmmPrices = async (pools, knownPrices) => {
+  console.log(pools);
   let prices = { ...knownPrices };
   let lps = {};
   let weights = {};

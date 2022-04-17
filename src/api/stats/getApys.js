@@ -12,6 +12,7 @@ const { getAuroraApys } = require('./aurora');
 const { getFuseApys } = require('./fuse');
 const { getMetisApys } = require('./metis');
 const { getMoonbeamApys } = require('./moonbeam');
+const { getVelasApys } = require('./velas');
 
 const INIT_DELAY = process.env.INIT_DELAY || 60 * 1000;
 const REFRESH_INTERVAL = 15 * 60 * 1000;
@@ -31,20 +32,21 @@ const updateApys = async () => {
 
   try {
     const results = await Promise.allSettled([
-      getMaticApys(),
-      getAvaxApys(),
-      getFantomApys(),
-      getHecoApys(),
-      getBSCApys(),
-      getOneApys(),
-      getArbitrumApys(),
-      getCeloApys(),
-      getMoonriverApys(),
-      getCronosApys(),
-      getAuroraApys(),
-      getFuseApys(),
-      getMetisApys(),
-      getMoonbeamApys(),
+      // getMaticApys(),
+      // getAvaxApys(),
+      // getFantomApys(),
+      // getHecoApys(),
+      // getBSCApys(),
+      // getOneApys(),
+      // getArbitrumApys(),
+      // getCeloApys(),
+      // getMoonriverApys(),
+      // getCronosApys(),
+      // getAuroraApys(),
+      getVelasApys(),
+      // getFuseApys(),
+      // getMetisApys(),
+      // getMoonbeamApys(),
     ]);
 
     for (const result of results) {

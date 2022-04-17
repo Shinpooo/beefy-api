@@ -13,6 +13,7 @@ const chainIdMap = {
   fuse: 122,
   metis: 1088,
   moonbeam: 1284,
+  velas: 106,
 };
 
 export default chainIdMap;

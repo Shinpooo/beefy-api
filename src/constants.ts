@@ -50,6 +50,7 @@ const AURORA_RPC =
 const FUSE_RPC = process.env.FUSE_RPC || 'https://rpc.fuse.io';
 const METIS_RPC = process.env.METIS_RPC || 'https://andromeda.metis.io/?owner=1088';
 const MOONBEAM_RPC = process.env.MOONBEAM_RPC || 'https://rpc.api.moonbeam.network';
+const VELAS_RPC = process.env.VELAS_RPC || 'https://evmexplorer.velas.com/rpc';
 
 const BSC_CHAIN_ID = ChainId.bsc;
 const HECO_CHAIN_ID = ChainId.heco;
@@ -65,6 +66,7 @@ const AURORA_CHAIN_ID = ChainId.aurora;
 const FUSE_CHAIN_ID = ChainId.fuse;
 const METIS_CHAIN_ID = ChainId.metis;
 const MOONBEAM_CHAIN_ID = ChainId.moonbeam;
+const VELAS_CHAIN_ID = ChainId.moonbeam;
 
 const DFYN_LPF = 0.003;
 const SUSHI_LPF = 0.003;
@@ -83,6 +85,7 @@ const PANGOLIN_LPF = 0.003;
 const TETHYS_LPF = 0.002;
 const BEAMSWAP_LPF = 0.0017;
 const TOMBSWAP_LPF = 0.005;
+const WAGYUSWAP_LPF = 0.0025;
 
 const MULTICHAIN_RPC: Record<ChainId, string> = {
   [ChainId.bsc]: BSC_RPC,
@@ -99,6 +102,7 @@ const MULTICHAIN_RPC: Record<ChainId, string> = {
   [ChainId.fuse]: FUSE_RPC,
   [ChainId.metis]: METIS_RPC,
   [ChainId.moonbeam]: MOONBEAM_RPC,
+  [ChainId.velas]: VELAS_RPC,
 };
 
 const BSC_VAULTS_ENDPOINT =
@@ -129,6 +133,7 @@ const METIS_VAULTS_ENDPOINT =
   'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/features/configure/vault/metis_pools.js';
 const MOONBEAM_VAULTS_ENDPOINT =
   'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/features/configure/vault/moonbeam_pools.js';
+const VELAS_VAULTS_ENDPOINT = '';
 
 const MULTICHAIN_ENDPOINTS = {
   bsc: BSC_VAULTS_ENDPOINT,
@@ -145,6 +150,7 @@ const MULTICHAIN_ENDPOINTS = {
   fuse: FUSE_VAULTS_ENDPOINT,
   metis: METIS_VAULTS_ENDPOINT,
   moonbeam: MOONBEAM_VAULTS_ENDPOINT,
+  velas: VELAS_VAULTS_ENDPOINT,
 };
 
 const BEEFY_PERFORMANCE_FEE = 0.045;
@@ -197,6 +203,9 @@ export {
   MOONBEAM_RPC,
   MOONBEAM_CHAIN_ID,
   MOONBEAM_VAULTS_ENDPOINT,
+  VELAS_RPC,
+  VELAS_CHAIN_ID,
+  VELAS_VAULTS_ENDPOINT,
   BASE_HPY,
   MINUTELY_HPY,
   HOURLY_HPY,
@@ -224,6 +233,7 @@ export {
   TETHYS_LPF,
   BEAMSWAP_LPF,
   TOMBSWAP_LPF,
+  WAGYUSWAP_LPF,
   BEEFY_PERFORMANCE_FEE,
   SHARE_AFTER_PERFORMANCE_FEE,
   EXCLUDED_IDS_FROM_TVL,

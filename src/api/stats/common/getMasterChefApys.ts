@@ -53,10 +53,11 @@ export const getMasterChefApys = async (
     ...(masterchefParams.pools ?? []),
     ...(masterchefParams.singlePools ?? []),
   ];
-
+  console.log('apy');
   const tradingAprs = await getTradingAprs(masterchefParams);
+  console.log(tradingAprs);
   const farmApys = await getFarmApys(masterchefParams);
-
+  console.log(farmApys);
   const liquidityProviderFee = masterchefParams.liquidityProviderFee ?? 0.003;
 
   return getApyBreakdown(masterchefParams.pools, tradingAprs, farmApys, liquidityProviderFee);
@@ -83,9 +84,11 @@ const getFarmApys = async (params: MasterChefApysParams): Promise<BigNumber[]> =
   const apys: BigNumber[] = [];
 
   const tokenPrice = await fetchPrice({ oracle: params.oracle, id: params.oracleId });
+  console.log('tokenprice: ', tokenPrice);
   const { multiplier, blockRewards, totalAllocPoint } = await getMasterChefData(params);
+  console.log('multiplier: ', multiplier);
   const { balances, allocPoints } = await getPoolsData(params);
-
+  console.log('balances: ', balances);
   const secondsPerBlock = params.secondsPerBlock ?? (await getBlockTime(params.chainId));
   if (params.log) {
     console.log(
@@ -103,18 +106,26 @@ const getFarmApys = async (params: MasterChefApysParams): Promise<BigNumber[]> =
     const oracle = pool.oracle ?? 'lps';
     const id = pool.oracleId ?? pool.name;
     const stakedPrice = await fetchPrice({ oracle, id });
+    console.log('balances: ', balances);
     const totalStakedInUsd = balances[i].times(stakedPrice).dividedBy(pool.decimals ?? '1e18');
-
+    console.log('totalStakedInUsd: ', totalStakedInUsd);
+    console.log('blockrewards: ', blockRewards);
+    console.log('multiplier: ', multiplier);
+    console.log('allocpoints: ', allocPoints[i]);
+    console.log('totalAllocPoint: ', totalAllocPoint);
+    console.log('pool deposit fee: ', pool.depositFee);
     const poolBlockRewards = blockRewards
       .times(multiplier)
       .times(allocPoints[i])
       .dividedBy(totalAllocPoint)
       .times(1 - (pool.depositFee ?? 0));
-
+    console.log('poolblockrewards: ', poolBlockRewards);
     const secondsPerYear = 31536000;
     const yearlyRewards = poolBlockRewards.dividedBy(secondsPerBlock).times(secondsPerYear);
+    console.log('yearlyRewards: ', yearlyRewards.valueOf());
+    console.log('tokenprice: ', tokenPrice);
     let yearlyRewardsInUsd = yearlyRewards.times(tokenPrice).dividedBy(params.decimals);
-
+    console.log('yearlyRewardsInUsd: ', yearlyRewardsInUsd);
     if (params.burn) {
       yearlyRewardsInUsd = yearlyRewardsInUsd.times(1 - params.burn);
     }
@@ -155,23 +166,45 @@ const getMasterChefData = async (params: MasterChefApysParams) => {
 const getPoolsData = async (params: MasterChefApysParams) => {
   const abi = params.masterchefAbi ?? chefAbi(params.tokenPerBlock);
   const masterchefContract = new params.web3.eth.Contract(abi, params.masterchef);
-  const multicall = new MultiCall(params.web3 as any, multicallAddress(params.chainId));
-  const balanceCalls = [];
-  const allocPointCalls = [];
-  params.pools.forEach(pool => {
+  console.log('loaded');
+  // const multicall = new MultiCall(params.web3 as any, multicallAddress(params.chainId));
+  //const multicall =  new MultiCall(params.web3 as any, "0x0359161B7C34aA49649e5C9f33d86a357da0Da92");
+  console.log('Multicall set');
+  const balances = [];
+  const allocPoints = [];
+
+  for (let i = 0; i < params.pools.length; i++) {
+    const pool = params.pools[i];
     const tokenContract = new params.web3.eth.Contract(ERC20_ABI, pool.address) as unknown as ERC20;
-    balanceCalls.push({
-      balance: tokenContract.methods.balanceOf(pool.strat ?? params.masterchef),
-    });
-    allocPointCalls.push({
-      allocPoint: masterchefContract.methods.poolInfo(pool.poolId),
-    });
-  });
+    const balance = new BigNumber(
+      await tokenContract.methods.balanceOf(pool.strat ?? params.masterchef).call()
+    );
+    const allocPoint = await masterchefContract.methods.poolInfo(pool.poolId).call();
+    console.log(balance);
+    console.log(allocPoint);
 
-  const res = await multicall.all([balanceCalls, allocPointCalls]);
+    // params.pools.forEach(pool => {
+    //   const tokenContract = new params.web3.eth.Contract(ERC20_ABI, pool.address) as unknown as ERC20;
+    //   const totalAllocPoint = new BigNumber(await tokenContract.methods.balanceOf(pool.strat ?? params.masterchef).call());
+    //   balanceCalls.push({
+    //     balance: tokenContract.methods.balanceOf(pool.strat ?? params.masterchef),
+    //   });
+    //   console.log("balance call push: ",balanceCalls)
+    //   allocPointCalls.push({
+    //     allocPoint: masterchefContract.methods.poolInfo(pool.poolId),
+    //   });
+    //   console.log("alloc points push: ",allocPointCalls)
+    // });
 
-  const balances: BigNumber[] = res[0].map(v => new BigNumber(v.balance));
-  const allocPoints: BigNumber[] = res[1].map(v => v.allocPoint[params.allocPointIndex ?? '1']);
+    //const res = await multicall.all([balanceCalls, allocPointCalls]);
+    // console.log("multicall done: ",res)
+
+    // const balances: BigNumber[] = [balance]
+    // balance
+    // const allocPoints: BigNumber[] = [new BigNumber(allocPoint[1])]
+    balances.push(balance);
+    allocPoints.push(new BigNumber(allocPoint[1]));
+  }
   return { balances, allocPoints };
 };
 
