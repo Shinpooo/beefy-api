@@ -1,6 +1,7 @@
 import { ChainId } from '../packages/address-book/address-book';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
+// const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = process.env.API_BASE_URL || 'https://beefy-api-beige.vercel.app/';
 
 const BASE_HPY = 2190;
 const MINUTELY_HPY = 525600;
